@@ -24,7 +24,6 @@ export const useFirebase = () => useContext(FireBaseContext);
 
 export function FireBaseProvider(props) {
   const sendUrl =  envData.DEV ?  "http://localhost:8080/sendFile" :  envData.VITE_SEND_FILE_URL ;
-  const deleteUrl=envData.DEV ? "http://localhost:8080/delete" : envData.VITE_DELETE_FILE_URL;
   const server_url=envData.DEV ? "http://localhost:8080/getFile" : envData.VITE_SERVER_URL;
 
   const sendFileToFireBase = async (fileName, otp) => {
