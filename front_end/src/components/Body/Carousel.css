@@ -1,0 +1,13 @@
+
+@media (max-width : 991px)
+{
+    .my-Carousel{
+        margin-top: 1.5rem;
+    }
+}
+
+
+#Speed 
+{
+    transition:transform 0.4s ease-in-out !important;
+}

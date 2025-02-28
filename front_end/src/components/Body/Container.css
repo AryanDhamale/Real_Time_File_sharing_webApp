@@ -1,0 +1,13 @@
+#mainBox
+{
+    background-image:url("/backGround.jpg");
+    background-position: center;
+    background-size: cover;
+}
+
+@media (max-width:991px)
+{
+    #mainBox{
+        height: auto !important;
+    }   
+}

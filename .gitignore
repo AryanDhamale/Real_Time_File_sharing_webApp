@@ -1,0 +1,9 @@
+
+# for FRNT_END // 
+front_end/node_modules
+front_end/.env
+
+
+#BACK_END // 
+back_end/node_modules 
+back_end/.env

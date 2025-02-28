@@ -1,0 +1,8 @@
+
+@media (max-width : 991px)
+{
+    .MainCon
+    {
+        height: unset !important;
+    }
+}

@@ -1,0 +1,35 @@
+
+.default 
+{
+    padding: 0;
+    margin: 0;
+}
+
+.InfCon > .name{
+    font-size:0.9rem;
+    opacity:0.5;
+    font-weight: 600;
+}
+
+.InfCon > .heading {
+    font-size: 4rem;
+    font-weight: 600;
+    line-height: 4rem;
+    margin: 0.9rem 0;
+}
+.InfCon > .sp 
+{
+  font-size: 1.3rem ;
+  font-weight: 600;
+  opacity: 0.5;
+  margin-bottom: 1.3rem;
+  line-height: 1.6rem;
+}
+
+.InfCon > .rules
+{
+    font-weight: 600;
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 0.7rem;
+}
