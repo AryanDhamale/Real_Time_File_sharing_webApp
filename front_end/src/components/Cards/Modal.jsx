@@ -68,13 +68,15 @@ function Modal({ localStream, controler,sendPhoto}) {
     }
 
     const dataURLtoFile = (imageURL, fileName) => {
-        const bstr = atob(imageURL.split(',')[1]);
+        const arr=imageURL.split(',');
+        const bstr = atob(arr[1]);
+        const mime = arr[0].match(/:(.*?);/)[1];
         let n = bstr.length;
         const u8arr = new Uint8Array(n);
         while (n--) {
             u8arr[n] = bstr.charCodeAt(n);
         }
-        return new File([u8arr], fileName, { type: "image/png" });
+        return new File([u8arr], fileName, { type: mime });
     }
 
     const closing = () => {
