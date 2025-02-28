@@ -4,6 +4,7 @@ import fs from "fs";
 import multer from "multer";
 import { fileURLToPath } from 'url';
 import path from "path";
+import {DeleteDocfromFireBase} from "./helper/helper.js";
 
 const app=express();
 const storage=multer.diskStorage({
@@ -12,6 +13,7 @@ const storage=multer.diskStorage({
     },
     filename : function(req,file,cb){
         cb(null,`${file.originalname}`);
+        appendOtp({name:file.originalname,time:new Date()});
     },
 });
 
@@ -27,11 +29,55 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
+
+//  OTP VALIDATION START // 
+let otpStorage=[];
+
+const appendOtp=(file)=>{
+  otpStorage.push(file);
+}
+
+const removeOtp=(fileName)=>{
+  otpStorage=otpStorage.filter((file,idx)=>file.name!=fileName);
+}
+
+const callFs=(err)=>{
+  if(err){
+    console.log({fs:"unlick",err});
+    return;
+  }else {
+    console.log("FLUSH-OUT");
+  }
+}
+
+const cleanupExiredOTPs=async()=>{
+  const now=new Date();
+  const trash=[];
+  otpStorage= otpStorage.filter((file,idx)=>{
+    let diff=(now-file.time)/1000/60;
+    if(diff<=1) return true ; 
+    else {
+      trash.push(file);
+      return false;
+    }
+  });
+
+  for(let i=0;i<trash.length;i++)
+  {
+    const OTP=trash[i].name.split('-')[0];
+    await DeleteDocfromFireBase(OTP);
+    fs.unlink(path.join(__dirname,"uploads",trash[i].name),callFs);
+  }
+}
+
+setInterval(cleanupExiredOTPs,30000);
+
+// OTP VALIDATION END // 
+
 const start=()=>{
 
    app.post("/sendFile",upload.single("Hero"),(req,res,next)=>{
       res.status(200).json({message:"accepted!"});
-      console.log("hit me");
    });
 
    app.post("/getFile",(req,res,next)=>{
@@ -49,7 +95,7 @@ const start=()=>{
            console.log({server:"server-side error",err});
            return ; 
         }else {
-          console.log("sent successfully");
+          removeOtp(fileName);
           fs.unlink(path.join(__dirname,"uploads",fileName),(err)=>{
             if(err) {
                 console.log(err);
@@ -60,23 +106,6 @@ const start=()=>{
         }
      });
    });
-
-  app.post("/delete",(req,res,next)=>{
-    console.log(req.body);
-    const {fileName}=req.body;
-    fs.unlink(path.join(__dirname,"uploads",fileName),function(err){
-      if(err) {
-        console.log(err);
-        res.status(503);
-        return ;
-      }else {
-        console.log("moved to trash!");
-        res.status(200).json({message:"moved-to-trash"});
-        return;
-      }
-    });
-  })
-
 
    app.all("*",(req,res,next)=>{
       res.status(404).json({message : "NOT FOUND"});

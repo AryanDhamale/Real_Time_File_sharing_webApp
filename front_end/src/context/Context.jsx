@@ -71,7 +71,6 @@ export function FireBaseProvider(props) {
         return;
       }
       docSnapshot.forEach(async (document) => {
-        //console.log(document.id, "=>", document.data());
         await deleteDoc(doc(FireStoreDb,"files",document.id));
       });
     } catch (err) {
